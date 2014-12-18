@@ -44,7 +44,7 @@ namespace OmniSharp
                         },
                         {
                             "v|verbose=", "Output debug information (Quiet, Debug, Verbose)",
-                            v => verbosity = v != null 
+                            v => verbosity = v != null
                                                 ? (Verbosity)Enum.Parse(typeof(Verbosity), v)
                                                 : Verbosity.Debug
                         },
@@ -57,7 +57,6 @@ namespace OmniSharp
                             path => configLocation = path
                         }
                     };
-           
 
             try
             {
@@ -79,7 +78,6 @@ namespace OmniSharp
             }
 
             StartServer(solutionPath, clientPathMode, port, verbosity, configLocation);
-            
         }
 
 
@@ -90,14 +88,17 @@ namespace OmniSharp
             Verbosity verbosity,
             string configLocation)
         {
-            
             var logger = new Logger(verbosity);
+
             try
             {
                 Configuration.ConfigurationLoader.Load(
                         configLocation: configLocation, clientMode: clientPathMode);
 
                 var solution = LoadSolution(solutionPath, logger);
+
+                Console.Title = string.Format("OmniSharp Port {0}, Solution {1}", port, solutionPath);
+
                 logger.Debug("Using solution path " + solutionPath);
                 logger.Debug("Using config file " + configLocation);
 
@@ -109,10 +110,10 @@ namespace OmniSharp
                             e.Cancel = true;
                         };
                 var nancyHost = new NancyHost(new Bootstrapper(
-                                                solution, 
-                                                new NativeFileSystem(), 
-                                                logger), 
-                                                new HostConfiguration{RewriteLocalhost=false}, 
+                                                solution,
+                                                new NativeFileSystem(),
+                                                logger),
+                                                new HostConfiguration{RewriteLocalhost=false},
                                                 new Uri("http://localhost:" + port));
 
                 nancyHost.Start();
@@ -123,7 +124,7 @@ namespace OmniSharp
                 {
                     Thread.Sleep(1000);
                 }
-                
+
                 Console.WriteLine("Quit gracefully");
                 nancyHost.Stop();
             }
