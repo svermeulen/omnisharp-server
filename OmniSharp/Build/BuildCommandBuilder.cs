@@ -16,10 +16,12 @@ namespace OmniSharp.Build
         {
             get
             {
-                return PlatformService.IsUnix
+                return "\"C:/Program Files (x86)/MSBuild/12.0/Bin/MSBuild.exe\"";
+
+                /*return PlatformService.IsUnix
                     ? "xbuild"
                     : Path.Combine(System.Runtime.InteropServices.RuntimeEnvironment.GetRuntimeDirectory(),
-                        "Msbuild.exe");
+                        "Msbuild.exe");*/
             }
         }
 
