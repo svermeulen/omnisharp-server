@@ -105,6 +105,10 @@
     <Compile Include="Configuration\PathMode.cs" />
     <Compile Include="Configuration\PathReplacement.cs" />
     <Compile Include="Configuration\TestCommands.cs" />
+    <Compile Include="GotoTypeDefinition\GotoTypeDefinitionHandler.cs" />
+    <Compile Include="GotoTypeDefinition\GotoTypeDefinitionModule.cs" />
+    <Compile Include="GotoTypeDefinition\GotoTypeDefinitionRequest.cs" />
+    <Compile Include="GotoTypeDefinition\GotoTypeDefinitionResponse.cs" />
     <Compile Include="SyntaxErrors\CodeCheckHandler.cs" />
     <Compile Include="SyntaxErrors\CodeCheckModule.cs" />
     <Compile Include="TestContextInformation\GetContextResponse.cs" />
