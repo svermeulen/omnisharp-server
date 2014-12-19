@@ -38,7 +38,7 @@ namespace OmniSharp.FindUsages
                             .OrderBy(n => n.GetRegion().FileName.LowerCaseDriveLetter())
                             .ThenBy(n => n.StartLocation.Line)
                             .ThenBy(n => n.StartLocation.Column);
-                            
+
             var res = new QuickFixResponse();
             if (result.Any())
             {
@@ -116,7 +116,7 @@ namespace OmniSharp.FindUsages
                 {
                     var pctx = project.ProjectContent.CreateCompilation();
                     var interesting = (from file in project.Files
-                                                      select (file.ParsedFile as CSharpUnresolvedFile)).ToList();
+                          select (file.ParsedFile as CSharpUnresolvedFile)).ToList();
 
                     Parallel.ForEach(interesting.Distinct(), file =>
                         {
@@ -138,8 +138,8 @@ namespace OmniSharp.FindUsages
 
         private void ProcessMemberResults(ResolveResult resolveResult)
         {
-            //TODO: why does FindReferencesInFile not return the definition for a field? 
-            // add it here instead for now. 
+            //TODO: why does FindReferencesInFile not return the definition for a field?
+            // add it here instead for now.
             var definition = resolveResult.GetDefinitionRegion();
             ProcessRegion(definition);
         }

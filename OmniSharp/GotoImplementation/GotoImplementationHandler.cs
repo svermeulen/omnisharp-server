@@ -39,7 +39,7 @@ namespace OmniSharp.GotoImplementation
 
             if (resolveResult is TypeResolveResult)
             {
-                return GetTypeResponse(rctx, resolveResult.Type.GetDefinition());
+                return GetTypeResponse(res, loc);
             }
 
             if (resolveResult is MemberResolveResult)
@@ -50,12 +50,22 @@ namespace OmniSharp.GotoImplementation
             return new QuickFixResponse();
         }
 
-        private QuickFixResponse GetTypeResponse(ITypeResolveContext rctx, ITypeDefinition typeDefinition)
+        private QuickFixResponse GetTypeResponse(ParsedResult res, TextLocation loc)
         {
-            var types = GetAllTypes(rctx).Select(t => t.Resolve(rctx).GetDefinition());
+            var compilations =
+                _solution.Projects.Select(p => p.ProjectContent.CreateCompilation()).ToList();
+
+            // Use the main assembly rather than current since otherwise we will miss a lot of implementations
+            var compilation = compilations.OrderByDescending(x => x.Assemblies.Count).First();
+
+            var types = compilation.GetAllTypeDefinitions();
+
+            ResolveResult resolveResult = ResolveAtLocation.Resolve(compilation, res.UnresolvedFile, res.SyntaxTree, loc);
+            var otherTypeDef = (resolveResult as TypeResolveResult).Type.GetDefinition();
+
             var quickFixes = from type in types where type != null
-                                 && type != typeDefinition
-                                 && type.IsDerivedFrom(typeDefinition)
+                                 && type != otherTypeDef
+                                 && type.IsDerivedFrom(otherTypeDef)
                              select QuickFix.ForFirstLineInRegion
                                         ( type.Region
                                         , _solution.GetFile(type.Region.FileName));
