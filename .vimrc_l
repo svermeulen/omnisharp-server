@@ -1,2 +1,3 @@
 
 let b:projectColor = "#0faf00"
+let b:OmniSharpUseReleaseServer = 1

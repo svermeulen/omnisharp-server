@@ -13,8 +13,11 @@ namespace OmniSharp.Documentation
         {
             string idString = entity.GetIdString();
             string result;
+
             if (_documentationCache.TryGetValue(idString, out result))
+            {
                 return result;
+            }
 
             DocumentationComment documentationComment = null;
             if (entity.Documentation != null)
@@ -26,7 +29,7 @@ namespace OmniSharp.Documentation
             {
                 if (entity.ParentAssembly.AssemblyName != null)
                 {
-                    IDocumentationProvider docProvider = 
+                    IDocumentationProvider docProvider =
                         XmlDocumentationProviderFactory.Get(project, entity.ParentAssembly.AssemblyName);
 
                     if (docProvider != null)
@@ -36,8 +39,8 @@ namespace OmniSharp.Documentation
                 }
             }
 
-            result = documentationComment != null 
-                ? DocumentationConverter.ConvertDocumentation(documentationComment.Xml.Text) 
+            result = documentationComment != null
+                ? DocumentationConverter.ConvertDocumentation(documentationComment.Xml.Text)
                 : null;
 
             _documentationCache.TryAdd(idString, result);

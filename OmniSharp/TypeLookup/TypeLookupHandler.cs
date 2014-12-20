@@ -37,22 +37,31 @@ namespace OmniSharp.TypeLookup
             var resolveResult = ResolveAtLocation.Resolve(res.Compilation, res.UnresolvedFile, res.SyntaxTree, loc);
             var response = new TypeLookupResponse();
             var ambience = new CSharpAmbience()
-                {
-                    ConversionFlags = AmbienceFlags,
-                };
+            {
+                ConversionFlags = AmbienceFlags,
+            };
 
+            if (request.UseFullNames)
+            {
+                ambience.ConversionFlags |=
+                    ConversionFlags.UseFullyQualifiedTypeNames |
+                    ConversionFlags.UseFullyQualifiedEntityNames;
+            }
 
             if (resolveResult == null || resolveResult is NamespaceResolveResult)
+            {
                 response.Type = "";
+            }
             else
             {
                 response.Type = resolveResult.Type.ToString();
                 IEntity entity = null;
+
                 if (resolveResult is CSharpInvocationResolveResult)
                 {
                     var result = resolveResult as CSharpInvocationResolveResult;
                     entity = result.Member;
-					response.Type = ambience.ConvertSymbol(result.Member);
+                    response.Type = ambience.ConvertSymbol(result.Member);
                 }
                 else if (resolveResult is LocalResolveResult)
                 {
@@ -63,7 +72,7 @@ namespace OmniSharp.TypeLookup
                 {
                     var result = resolveResult as MemberResolveResult;
                     entity = result.Member;
-					response.Type = ambience.ConvertSymbol(result.Member);
+                    response.Type = ambience.ConvertSymbol(result.Member);
                 }
                 else if (resolveResult is TypeResolveResult)
                 {
@@ -72,9 +81,14 @@ namespace OmniSharp.TypeLookup
                 }
 
                 if (resolveResult.Type is UnknownType)
+                {
                     response.Type = "Unknown Type: " + resolveResult.Type.Name;
+                }
+
                 if (resolveResult.Type == SpecialType.UnknownType)
+                {
                     response.Type = "Unknown Type";
+                }
 
                 if (request.IncludeDocumentation && entity != null)
                 {

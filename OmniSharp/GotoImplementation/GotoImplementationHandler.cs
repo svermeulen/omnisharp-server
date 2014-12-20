@@ -52,11 +52,11 @@ namespace OmniSharp.GotoImplementation
 
         private QuickFixResponse GetTypeResponse(ParsedResult res, TextLocation loc)
         {
-            var compilations =
-                _solution.Projects.Select(p => p.ProjectContent.CreateCompilation()).ToList();
+            var rootProject = _solution.Projects.Where(x => !(x is OrphanProject))
+                .OrderByDescending(x => x.References.OfType<OmniSharp.Solution.ProjectReference>().Count()).First();
 
             // Use the main assembly rather than current since otherwise we will miss a lot of implementations
-            var compilation = compilations.OrderByDescending(x => x.Assemblies.Count).First();
+            var compilation = rootProject.ProjectContent.CreateCompilation();
 
             var types = compilation.GetAllTypeDefinitions();
 
@@ -66,6 +66,7 @@ namespace OmniSharp.GotoImplementation
             var quickFixes = from type in types where type != null
                                  && type != otherTypeDef
                                  && type.IsDerivedFrom(otherTypeDef)
+                                 && type.Region.FileName != null
                              select QuickFix.ForFirstLineInRegion
                                         ( type.Region
                                         , _solution.GetFile(type.Region.FileName));
