@@ -9,7 +9,8 @@
     <RootNamespace>OmniSharp</RootNamespace>
     <AssemblyName>OmniSharp</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <TargetFrameworkProfile></TargetFrameworkProfile>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
@@ -108,6 +109,9 @@
     <Compile Include="GotoTypeDefinition\GotoTypeDefinitionModule.cs" />
     <Compile Include="GotoTypeDefinition\GotoTypeDefinitionRequest.cs" />
     <Compile Include="GotoTypeDefinition\GotoTypeDefinitionResponse.cs" />
+    <Compile Include="ProjectManipulation\AddNewFile\AddNewFileHandler.cs" />
+    <Compile Include="ProjectManipulation\AddNewFile\AddNewFileModule.cs" />
+    <Compile Include="ProjectManipulation\AddNewFile\AddNewFileRequest.cs" />
     <Compile Include="SyntaxErrors\CodeCheckHandler.cs" />
     <Compile Include="SyntaxErrors\CodeCheckModule.cs" />
     <Compile Include="TestContextInformation\GetContextResponse.cs" />
