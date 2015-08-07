@@ -24,18 +24,27 @@ namespace OmniSharp.ProjectManipulation.RemoveFromProject
                 throw new ProjectNotFoundException(string.Format("Unable to find project relative to file {0}", request.FileName));
             }
 
+            RemoveFromProject(relativeProject, request.FileName);
+        }
+
+        public void RemoveFromProject(IProject relativeProject, string fileName)
+        {
             var project = relativeProject.AsXml();
-			var separator = relativeProject.FileName.Contains ("/") ? "/" : "\\";
-            var relativeFileName = request.FileName.Replace(relativeProject.FileName.Substring(0, relativeProject.FileName.LastIndexOf(separator) + 1), "")
+
+            var fileNameFull = Path.GetFullPath(fileName);
+            var projectPathFull = Path.GetFullPath(relativeProject.FileName);
+
+            var separator = projectPathFull.Contains ("/") ? "/" : "\\";
+            var relativeFileName = fileNameFull.Replace(projectPathFull.Substring(0, projectPathFull.LastIndexOf(separator) + 1), "")
                 .Replace("/", @"\");
 
             var fileNode = project.CompilationNodes()
-				.FirstOrDefault(n => n.Attribute("Include")
-				                .Value.Equals(relativeFileName, StringComparison.InvariantCultureIgnoreCase));
+                .FirstOrDefault(n => n.Attribute("Include")
+                                .Value.Equals(relativeFileName, StringComparison.InvariantCultureIgnoreCase));
 
             if (fileNode != null)
             {
-                RemoveFileFromProject(relativeProject, request.FileName);
+                RemoveFileFromProject(relativeProject, fileNameFull);
 
                 project.CompilationNodes().Where(n => n.Attribute("Include").Value.Equals(relativeFileName, StringComparison.InvariantCultureIgnoreCase)).Remove();
 
@@ -45,7 +54,7 @@ namespace OmniSharp.ProjectManipulation.RemoveFromProject
                 {
                     project.ItemGroupNodes().Where(n => !n.Nodes().Any()).Remove();
                 }
-                
+
                 relativeProject.Save(project);
             }
         }

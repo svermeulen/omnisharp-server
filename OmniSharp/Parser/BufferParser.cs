@@ -16,6 +16,12 @@ namespace OmniSharp.Parser
         public ParsedResult ParsedContent(string editorText, string filename)
         {
             var project = _solution.ProjectContainingFile(filename);
+
+            return ParsedContent(project, editorText, filename);
+        }
+
+        public ParsedResult ParsedContent(IProject project, string editorText, string filename)
+        {
             project.UpdateFile(filename, editorText);
 
             var syntaxTree = project.CreateParser().Parse(editorText, filename);
@@ -26,7 +32,7 @@ namespace OmniSharp.Parser
             project.ProjectContent = pctx;
 
             ICompilation cmp = pctx.CreateCompilation();
-            
+
             return new ParsedResult
                 {
                     ProjectContent = pctx,
