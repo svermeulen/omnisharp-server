@@ -27,7 +27,7 @@ namespace OmniSharp.ProjectManipulation.AddToProject
                 return;
             }
 
-            var relativeProject = _solution.ProjectContainingFile(request.FileName);
+            var relativeProject = _solution.GuessProject(request.FileName);
 
             if (relativeProject == null || relativeProject is OrphanProject)
             {

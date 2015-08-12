@@ -33,6 +33,11 @@ namespace OmniSharp.Solution
                      select file).FirstOrDefault();
         }
 
+        public IProject GuessProject(string filename)
+        {
+            return _project;
+        }
+
         public IProject ProjectContainingFile(string filename)
         {
             return _project;
@@ -57,5 +62,5 @@ namespace OmniSharp.Solution
         }
 
     }
-    
+
 }

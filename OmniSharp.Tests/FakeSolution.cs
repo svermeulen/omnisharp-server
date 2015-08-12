@@ -36,6 +36,11 @@ namespace OmniSharp.Tests
                     select file).FirstOrDefault();
         }
 
+        public IProject GuessProject(string filename)
+        {
+            return Projects.FirstOrDefault();
+        }
+
         public IProject ProjectContainingFile(string filename)
         {
             return Projects.FirstOrDefault(p => p.Files.Any(f => f.FileName.LowerCaseDriveLetter().Equals(filename.LowerCaseDriveLetter(), StringComparison.InvariantCultureIgnoreCase)));
