@@ -5,35 +5,36 @@ namespace OmniSharp.Build
 {
     public class BuildCommandBuilder
     {
-        private readonly ISolution _solution;
+        readonly ISolution _solution;
 
         public BuildCommandBuilder(ISolution solution)
         {
             _solution = solution;
         }
 
-        public string Executable
+        public string GetCommand(bool useDevenv)
         {
-            get
-            {
-                return "\"C:/Program Files (x86)/Microsoft Visual Studio 12.0/Common7/IDE/devenv.com\"";
-                //return "\"C:/Program Files (x86)/MSBuild/12.0/Bin/MSBuild.exe\"";
-
-                /*return PlatformService.IsUnix
-                    ? "xbuild"
-                    : Path.Combine(System.Runtime.InteropServices.RuntimeEnvironment.GetRuntimeDirectory(),
-                        "Msbuild.exe");*/
-            }
+            return GetExecutable(useDevenv).ApplyPathReplacementsForClient() + " " + GetArguments(useDevenv);
         }
 
-        public string Arguments
+        public string GetExecutable(bool useDevenv)
         {
-            get
+            if (useDevenv)
+            {
+                return "\"C:/Program Files (x86)/Microsoft Visual Studio 12.0/Common7/IDE/devenv.com\"";
+            }
+
+            return "\"C:/Program Files (x86)/MSBuild/12.0/Bin/MSBuild.exe\"";
+        }
+
+        public string GetArguments(bool useDevenv)
+        {
+            if (useDevenv)
             {
                 return _solution.FileName + " /build";
             }
 
-            //get { return (PlatformService.IsUnix ? "" : "/m ") + "/nologo /v:q /property:GenerateFullPaths=true \"" + _solution.FileName + "\""; }
+            return "/m /nologo /v:q /property:GenerateFullPaths=true \"" + _solution.FileName + "\"";
         }
     }
 }

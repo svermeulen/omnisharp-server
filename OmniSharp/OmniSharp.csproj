@@ -9,8 +9,7 @@
     <RootNamespace>OmniSharp</RootNamespace>
     <AssemblyName>OmniSharp</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <TargetFrameworkProfile>
-    </TargetFrameworkProfile>
+    <TargetFrameworkProfile></TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
@@ -265,6 +264,7 @@
     <Compile Include="ProjectManipulation\RenameFile\RenameFileHandler.cs" />
     <Compile Include="ProjectManipulation\RenameFile\RenameFileRequest.cs" />
     <Compile Include="ProjectManipulation\RenameFile\RenameFileModule.cs" />
+    <Compile Include="Build\BuildRequest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

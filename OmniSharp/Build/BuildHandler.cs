@@ -25,12 +25,13 @@ namespace OmniSharp.Build
 
         public BuildResponse Build()
         {
-            var build = _commandBuilder.Executable;
+            bool useDevenv = false;
+            var build = _commandBuilder.GetExecutable(useDevenv);
 
             var startInfo = new ProcessStartInfo
                 {
                     FileName = build,
-                    Arguments = _commandBuilder.Arguments,
+                    Arguments = _commandBuilder.GetArguments(useDevenv),
                     RedirectStandardOutput = true,
                     RedirectStandardError = true,
                     RedirectStandardInput = true,
